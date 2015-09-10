@@ -1,0 +1,167 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chess Clock</title>
+    <style type="text/css" media="screen">
+      body {
+        background-color: #e5e3e5;
+        font-family: 'Titillium Web', sans-serif;
+        color: hsla(223,8%,18%,0.8);
+      }
+      .container {
+        width: 50%;
+        margin: 0 auto;
+        height: auto;
+        text-align: center;
+        background-color: #d7ab69;
+        padding: 20px;
+        border: 0.5px solid hsla(0,0%,40%,0.5);
+        box-shadow: 2px 2px 2px 2px hsla(0,0%,40%,0.5);
+      }
+      .head h1 {
+        margin: 0;
+      }
+
+      .clocksleft {
+        float: left;
+      }
+
+      .clocksright {
+        float: right;
+        margin-bottom: 200px;
+      }
+
+      .playerBtn {
+        clear: both;
+        width: 39%;
+        margin: -14px auto 30px auto;
+        text-align: center;
+      }
+      #clock1 {
+        float: left;
+              }
+      #clock2 {
+        float: right;
+      }
+      .board {
+        width: 50%;
+        margin: 30px auto;
+      }
+
+      img {
+        width: 100%;
+      }
+    </style>
+
+
+    <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,900,700italic,700,600italic,600,400italic,300,300italic,200,200italic' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+    <div class="container">
+        <div class="head">
+            <h1>Chess Timer</h1>
+        </div>
+        <div class="clocksleft">
+          
+                <h2>
+              Player 1: 
+            </h2>
+                <div id="timeText1">4:00</div>
+            </div>
+            <div class="clocksright">
+                <h2>
+              Player 2: 
+            </h2>
+                <div id="timeText2">4:00</div>
+            </div>
+            <br />
+            <input type="button" value="Reset" onclick="resetTime();">
+            <br>
+        <div class="board">
+          <img src="http://www.intuitor.com/chess/images/Chess_Board.jpg" alt="">
+        </div>
+        <br>
+
+        <div class="playerBtn one">
+            <input type="button" value="Player 1" id="clock1" />
+            <input type="button" value="Player 2" id="clock2" />
+        </div>
+    </div>
+
+  </div>
+
+
+    <script>
+    var btn1 = document.getElementById('clock1');
+    var btn2 = document.getElementById('clock2');
+    var player1 = new timerChess(function() {}, 1000, 240, "timeText1", 'Player 1');
+    var player2 = new timerChess(function() {}, 1000, 240, "timeText2", 'Player 2');
+
+    function timerChess(callback, delay, ticker, str, player) {
+        var clockId;
+        var btn;
+        var startAgain;
+        var timeLeft = delay;
+
+        this.reset = function() {
+            clearTimeout(clockId);
+            ticker = 240;
+        };
+
+        this.pause = function() {
+            clearTimeout(clockId);
+            timeLeft =- btn - new Date();
+        };
+
+        startAgain = function() {
+            btn = new Date();
+            clockId = setTimeout(function() {
+                timeLeft = delay;
+                startAgain(); }, timeLeft);
+                --ticker;
+
+            var minutes = Math.floor((ticker) / 60);
+            var seconds = (ticker) % 60;
+            if (seconds < 10) {
+                seconds = '0' + seconds;
+            }
+
+          document.getElementById(str).innerHTML = minutes + ':' + seconds;
+            if (ticker === 0) {
+                window.alert(player + " Wins!!");
+                resetTime();
+            }
+        };
+        this.startAgain = startAgain;
+    };
+
+
+    
+
+     var resetTime = function () {
+        player1.reset();
+        player2.reset();
+        ticker = '4:00';
+        document.getElementById("timeText1").innerHTML = ticker;
+        document.getElementById("timeText2").innerHTML = ticker;
+ 
+    };
+
+    btn1.onclick = function switchPlayer1() {
+        player1.pause();
+        player2.startAgain();
+        this.setAttribute("disabled", true);
+        btn2.removeAttribute("disabled", false);
+    };
+    btn2.onclick = function switchPlayer2() {
+        player2.pause();
+        player1.startAgain();
+        this.setAttribute("disabled", true);
+        btn1.removeAttribute("disabled", true);
+    };
+    </script>
+</body>
+
+</html>
